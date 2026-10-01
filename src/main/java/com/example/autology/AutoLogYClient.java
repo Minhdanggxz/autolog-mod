@@ -17,10 +17,12 @@ import net.minecraft.text.Text;
 public class AutoLogYClient implements ClientModInitializer {
     private static final double Y_LEVEL = -5;
     private static final int RECONNECT_DELAY_TICKS = 60; // 3 seconds
+    private static final int REARM_TICKS = 40; // must stay above Y_LEVEL for 2 seconds to re-arm
 
     private boolean armed = true;
     private ServerInfo lastServer;
     private int reconnectTicks = -1;
+    private int aboveTicks = 0;
 
     @Override
     public void onInitializeClient() {
@@ -63,15 +65,21 @@ public class AutoLogYClient implements ClientModInitializer {
             return;
         }
 
-        if (mc.player == null || mc.getNetworkHandler() == null) return;
+        if (mc.player == null || mc.getNetworkHandler() == null) {
+            aboveTicks = 0;
+            return;
+        }
 
         double y = mc.player.getY();
 
-        // Re-arm once you are back above the trigger level (prevents a disconnect loop)
+        // Re-arm only after staying above the trigger level for a while.
+        // (Right after joining, the player can briefly appear at a wrong height.)
         if (y > Y_LEVEL) {
-            armed = true;
+            if (!armed && ++aboveTicks >= REARM_TICKS) armed = true;
             return;
         }
+        aboveTicks = 0;
+
         if (!armed) return;
         if (current == null) return; // singleplayer: do nothing
 
@@ -81,5 +89,4 @@ public class AutoLogYClient implements ClientModInitializer {
             Text.literal("[AutoLogY] Reached Y = " + (int) y)
         );
     }
-  }
-                  
+}
