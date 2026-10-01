@@ -15,8 +15,8 @@ import net.minecraft.client.network.ServerInfo;
 import net.minecraft.text.Text;
 
 public class AutoLogYClient implements ClientModInitializer {
-    private static final double Y_LEVEL = -5;
-    private static final int RECONNECT_DELAY_TICKS = 60; // 3 seconds
+    private static final double Y_LEVEL = -3;
+    private static final int RECONNECT_DELAY_TICKS = 10; // 0.5 seconds
     private static final int REARM_TICKS = 40; // must stay above Y_LEVEL for 2 seconds to re-arm
 
     private boolean armed = true;
