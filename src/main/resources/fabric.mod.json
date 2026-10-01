@@ -1,1 +1,17 @@
-
+{
+  "schemaVersion": 1,
+  "id": "autology",
+  "version": "${version}",
+  "name": "AutoLogY",
+  "description": "Disconnects from the server when you dig down to Y = -5.",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["com.example.autology.AutoLogYClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.4",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
